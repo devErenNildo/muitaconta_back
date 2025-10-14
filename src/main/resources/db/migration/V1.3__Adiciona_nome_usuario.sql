@@ -1,0 +1,5 @@
+ALTER TABLE tb_users
+ADD COLUMN nome VARCHAR(255) NOT NULL;
+
+ALTER TABLE tb_user_provider
+ADD COLUMN ultimo_login TIMESTAMP
