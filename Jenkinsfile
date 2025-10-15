@@ -45,17 +45,21 @@ pipeline {
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
 
                         if (changes) {
-                            echo "Alterações detectadas. Configurando o Git..."
-                            sh "git config user.email 'jenkins@muitaconta.com.br'"
-                            sh "git config user.name 'Jenkins CI'"
+                            withCredentials([usernamePassword(credentialsId: 'k3s-repo-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                                echo "Alterações detectadas. Configurando o Git..."
+                                sh "git config user.email 'jenkins@muitaconta.com.br'"
+                                sh "git config user.name 'Jenkins CI'"
 
-                            echo "Adicionando e commitando as alterações..."
-                            sh "git add ."
-                            sh "git commit -m 'Sync: Atualizando manifestos do Kubernetes a partir do backend [ci skip]'"
+                                echo "Adicionando e commitando as alterações..."
+                                sh "git add ."
+                                sh "git commit -m 'Sync: Atualizando manifestos do Kubernetes a partir do backend [ci skip]'"
 
-                            echo "Enviando as alterações para o repositório de DevOps..."
-                            sh "git push origin HEAD:main"
-                            echo "Repositório de DevOps atualizado com sucesso!"
+                                echo "Enviando as alterações para o repositório de DevOps..."
+                                sh "git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/devErenNildo/muita-conta_devops.git"
+                                sh "git push origin HEAD:main"
+
+                                echo "Repositório de DevOps atualizado com sucesso!"
+                            }
                         } else {
                             echo "Nenhuma alteração detectada. Nenhum commit necessário."
                         }
