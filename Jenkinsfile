@@ -6,14 +6,15 @@ pipeline {
         K3S_REPO_CREDENTIALS_ID = "k3s-repo-credentials"
     }
 
-    stage('Cleanup Workspace') {
-        steps {
-            echo "Limpando o workspace..."
-            cleanWs()
-        }
-    }
-
     stages {
+
+        stage('Cleanup Workspace') {
+            steps {
+                echo "Limpando o workspace..."
+                cleanWs()
+            }
+        }
+
         stage('Checkout Repositório do Backend') {
             steps {
                 echo "Clonando o repositório da aplicação..."
