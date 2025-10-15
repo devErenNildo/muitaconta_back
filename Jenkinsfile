@@ -1,13 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        K3S_REPO_URL = "github.com/devErenNildo/muita-conta_devops.git"
-        K3S_REPO_CREDENTIALS_ID = "k3s-repo-credentials"
-    }
-
     stages {
-
         stage('Cleanup Workspace') {
             steps {
                 echo "Limpando o workspace..."
@@ -17,20 +11,23 @@ pipeline {
 
         stage('Checkout Repositório do Backend') {
             steps {
-                echo "Clonando o repositório da aplicação..."
+                echo "Clonando o repositório da aplicação (backend)..."
                 checkout scm
             }
         }
 
-        stage('Clone Repositório K3s') {
+        stage('Clone Repositório K3s (DevOps)') {
             steps {
-                script {
-                    echo "Clonando o repositório de DevOps: ${K3S_REPO_URL}"
-                    withCredentials([gitUsernamePassword(credentialsId: K3S_REPO_CREDENTIALS_ID, gitToolName: 'Default')]) {
-                        def authRepoUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@${K3S_REPO_URL_NO_PROTOCOL}"
-                        sh "git clone ${authRepoUrl} k3s-repo"
-                    }
-                }
+                echo "Clonando o repositório de DevOps..."
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/devErenNildo/muita-conta_devops.git',
+                        credentialsId: 'k3s-repo-credentials'
+                    ]],
+                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'k3s-repo']]
+                ])
             }
         }
 
@@ -41,29 +38,26 @@ pipeline {
                         echo "Limpando o diretório de destino (exceto a pasta .git)..."
                         sh 'find . -mindepth 1 -path ./.git -prune -o -exec rm -rf {} +'
 
-                        echo "Copiando a pasta 'k3s' do backend para o repositório de DevOps..."
+                        echo "Copiando o CONTEÚDO da pasta 'k3s' para a raiz..."
                         sh 'cp -a ../k3s/. .'
 
                         echo "Verificando se há alterações para commitar..."
-
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
 
                         if (changes) {
-                            echo "Alterações detectadas. Configurando o Git para fazer o commit..."
+                            echo "Alterações detectadas. Configurando o Git..."
                             sh "git config user.email 'jenkins@muitaconta.com.br'"
                             sh "git config user.name 'Jenkins CI'"
 
                             echo "Adicionando e commitando as alterações..."
                             sh "git add ."
-
                             sh "git commit -m 'Sync: Atualizando manifestos do Kubernetes a partir do backend [ci skip]'"
 
                             echo "Enviando as alterações para o repositório de DevOps..."
-
                             sh "git push origin HEAD:main"
                             echo "Repositório de DevOps atualizado com sucesso!"
                         } else {
-                            echo "Nenhuma alteração detectada nos arquivos do Kubernetes. Nenhum commit necessário."
+                            echo "Nenhuma alteração detectada. Nenhum commit necessário."
                         }
                     }
                 }
