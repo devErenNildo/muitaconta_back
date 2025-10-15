@@ -29,8 +29,11 @@ pipeline {
             steps {
                 dir('k3s-repo') {
                     script {
-                        echo "Sincronizando a pasta 'k3s' do backend para o repositório de DevOps..."
-                        sh 'rsync -av --delete ../workspace/k3s/ ./'
+                        echo "Limpando o diretório de destino (exceto a pasta .git)..."
+                        sh 'find . -path ./.git -prune -o -exec rm -rf {} +'
+
+                        echo "Copiando a pasta 'k3s' do backend para o repositório de DevOps..."
+                        sh 'cp -R ../k3s/ .'
 
                         echo "Verificando se há alterações para commitar..."
 
