@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/devErenNildo/muita-conta_devops.git'
-    path: k3s/applications/jenkins
+    path: /applications/jenkins
     targetRevision: HEAD
   destination:
     server: 'https://kubernetes.default.svc'
