@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        K3S_REPO_URL = "https://github.com/devErenNildo/muita-conta_devops.git"
+        K3S_REPO_URL = "github.com/devErenNildo/muita-conta_devops.git"
         K3S_REPO_CREDENTIALS_ID = "k3s-repo-credentials"
     }
 
@@ -27,7 +27,8 @@ pipeline {
                 script {
                     echo "Clonando o repositório de DevOps: ${K3S_REPO_URL}"
                     withCredentials([gitUsernamePassword(credentialsId: K3S_REPO_CREDENTIALS_ID, gitToolName: 'Default')]) {
-                        sh "git clone ${K3S_REPO_URL} k3s-repo"
+                        def authRepoUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@${K3S_REPO_URL_NO_PROTOCOL}"
+                        sh "git clone ${authRepoUrl} k3s-repo"
                     }
                 }
             }
