@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        cleanWs()
+    }
+
     environment {
         K3S_REPO_URL = "https://github.com/devErenNildo/muita-conta_devops.git"
         K3S_REPO_CREDENTIALS_ID = "k3s-repo-credentials"
