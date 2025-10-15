@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: docker-registry
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/devErenNildo/muita-conta_devops.git'
+    path: k3s/infra/docker-registry
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: docker-registry
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,97 @@
+# 1. Namespace para isolar os recursos do Jenkins
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+
+---
+# 2. Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-admin
+  namespace: jenkins
+
+---
+# 3. Permissões para a Service Account
+# permite que ele crie e gerencie pods de agentes de build.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-admin-binding
+  namespace: jenkins
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-admin
+    namespace: jenkins
+roleRef:
+  kind: ClusterRole
+  name: admin
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# 4. Volume Persistente
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-pvc
+  namespace: jenkins
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi # 8 GB de armazenamento
+
+---
+# 5. Deployment do Jenkins Controller
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-server
+  template:
+    metadata:
+      labels:
+        app: jenkins-server
+    spec:
+      serviceAccountName: jenkins-admin
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts-jdk17
+          ports:
+            - name: httpport
+              containerPort: 8080
+            - name: jnlpport
+              containerPort: 50000
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
+
+---
+# 6. expor o Jenkins internamente no cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: jenkins
+spec:
+  selector:
+    app: jenkins-server
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: jnlp
+      port: 50000
+      targetPort: 50000
