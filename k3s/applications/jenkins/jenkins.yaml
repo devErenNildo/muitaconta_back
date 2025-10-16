@@ -69,6 +69,13 @@ spec:
               containerPort: 8080
             - name: jnlpport
               containerPort: 50000
+          env:
+            - name: JENKINS_URL
+              value: "https://jenkins.muitaconta.com.br"
+            - name: JAVA_OPTS
+              value: "-Djenkins.model.Jenkins.crumbIssuerProxyCompatibility=true -Dhudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID=true"
+            - name: JENKINS_OPTS
+              value: "--httpPort=8080"
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home

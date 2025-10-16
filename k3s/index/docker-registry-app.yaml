@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/devErenNildo/muita-conta_devops.git'
-    path: /infra/docker-registry
+    path: infra/docker-registry
     targetRevision: HEAD
   destination:
     server: 'https://kubernetes.default.svc'
