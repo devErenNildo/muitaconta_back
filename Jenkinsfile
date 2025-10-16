@@ -1,6 +1,16 @@
 pipeline {
     agent any
 
+    properties([
+        pipelineTriggers([
+            [
+                $class: 'GitHubPushTrigger',
+                spec: '',
+                secret: 'github-webhook-secret'
+            ]
+        ])
+    ])
+
     stages {
         stage('Cleanup Workspace') {
             steps {
