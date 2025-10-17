@@ -21,6 +21,8 @@ spec:
           ports:
             - containerPort: 80
           env:
+            - name: REGISTRY_URL
+              value: "https://registry-ui.muitaconta.com.br"
             - name: DELETE_IMAGES
               value: "false"
             - name: REGISTRY_SECURED
