@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: docker-registry-ui-creds
                   key: password
+            - name: UI_HTTPS_ENABLED
+              value: "true"
           resources:
             requests:
               cpu: "50m"
