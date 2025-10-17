@@ -15,6 +15,8 @@ spec:
       labels:
         app: muita-conta-api
     spec:
+      imagePullSecrets:
+        - name: docker-registry-credentials
       containers:
         - name: muita-conta-api
           image: registry.muitaconta.com.br/muita-conta-api:latest
