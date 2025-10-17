@@ -140,7 +140,7 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY = 'registry.muitaconta.com.br'
-        IMAGE_NAME = 'muitaconta'
+        IMAGE_NAME = 'muita-conta-api'
         DOCKER_CREDENTIALS_ID = 'docker-registry-credentials'
         DEVOPS_REPO_URL = 'https://github.com/devErenNildo/muita-conta_devops.git'
         DEVOPS_REPO_CREDENTIALS_ID = 'k3s-repo-credentials'
