@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: muita-conta-api-deployment
+  namespace: muita-conta-api
+  labels:
+    app: muita-conta-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: muita-conta-api
+  template:
+    metadata:
+      labels:
+        app: muita-conta-api
+    spec:
+      containers:
+        - name: muita-conta-api
+          image: registry.muitaconta.com.br/muitaconta-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: DB_URL
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: DB_PASSWORD
+
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_HOST
+            - name: RABBITMQ_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_PORT
+            - name: RABBITMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_USER
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_PASSWORD
+
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: GOOGLE_CLIENT_ID
+
+            - name: jwt.private.key
+              value: "file:/etc/jwt/app.key"
+            - name: jwt.public.key
+              value: "file:/etc/jwt/app.pub"
+
+          volumeMounts:
+            - name: jwt-keys-volume
+              mountPath: "/etc/jwt"
+              readOnly: true
+      volumes:
+        - name: jwt-keys-volume
+          secret:
+            secretName: jwt-keys

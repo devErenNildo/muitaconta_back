@@ -16,14 +16,34 @@ spec:
         app: docker-registry
     spec:
       containers:
-      - name: registry
-        image: registry:2
-        ports:
-        - containerPort: 5000
-        volumeMounts:
-        - name: registry-storage
-          mountPath: /var/lib/registry
+        - name: registry
+          image: registry:2
+          ports:
+            - containerPort: 5000
+          env:
+            - name: REGISTRY_AUTH
+              value: "htpasswd"
+            - name: REGISTRY_AUTH_HTPASSWD_REALM
+              value: "Registry Realm"
+            - name: REGISTRY_AUTH_HTPASSWD_PATH
+              value: "/auth/htpasswd"
+          volumeMounts:
+            - name: registry-storage
+              mountPath: /var/lib/registry
+            - name: auth-volume
+              mountPath: /auth
+              readOnly: true
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
       volumes:
-      - name: registry-storage
-        persistentVolumeClaim:
-          claimName: docker-registry-pvc
+        - name: registry-storage
+          persistentVolumeClaim:
+            claimName: docker-registry-pvc
+        - name: auth-volume
+          secret:
+            secretName: docker-registry-auth
