@@ -152,31 +152,31 @@ pipeline {
             }
         }
 
-//         stage('Build da aplicação') {
-//             steps {
-//                 echo "Compilando a aplicação Spring"
-//                 sh "mvn clean package -DskipTests"
-//             }
-//         }
+        stage('Build da aplicação') {
+            steps {
+                echo "Compilando a aplicação Spring"
+                sh "mvn clean package -DskipTests"
+            }
+        }
 
-//         stage('Build e Push da imagem Docker') {
-//             steps {
-//                 script {
-//                     def imageTag = "${env.BUILD_NUMBER}"
-//                     def fullImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag}"
-//                     def latestImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
-//
-//                     echo "Construindo a imagem Docker: ${fullImageName}"
-//                     def customImage = docker.build(fullImageName, ".")
-//
-//                     docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKER_CREDENTIALS_ID) {
-//                         echo "Enviando a imagem para o registry..."
-//                         customImage.push()
-//                         customImage.push('latest')
-//                     }
-//                 }
-//             }
-//         }
+        stage('Build e Push da imagem Docker') {
+            steps {
+                script {
+                    def imageTag = "${env.BUILD_NUMBER}"
+                    def fullImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag}"
+                    def latestImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
+
+                    echo "Construindo a imagem Docker: ${fullImageName}"
+                    def customImage = docker.build(fullImageName, ".")
+
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKER_CREDENTIALS_ID) {
+                        echo "Enviando a imagem para o registry..."
+                        customImage.push()
+                        customImage.push('latest')
+                    }
+                }
+            }
+        }
 
         stage('Clone e Sincronização do Repositório K3s (DevOps)') {
             steps {
