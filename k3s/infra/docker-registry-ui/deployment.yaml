@@ -21,8 +21,6 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: REGISTRY_URL
-              value: "http://docker-registry-service.docker-registry.svc.cluster.local:5000"
             - name: DELETE_IMAGES
               value: "false"
             - name: REGISTRY_SECURED
