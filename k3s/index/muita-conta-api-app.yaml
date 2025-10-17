@@ -1,25 +1,20 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: muita-conta-api-ingress
-  namespace: muita-conta-api
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: muita-conta-api
+  namespace: argocd
 spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
-        - api.muitaconta.com.br
-      secretName: muita-conta-api-tls
-  rules:
-    - host: api.muitaconta.com.br
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: muita-conta-api-service
-                port:
-                  number: 80
+  project: default
+  source:
+    repoURL: 'https://github.com/devErenNildo/muita-conta_devops.git'
+    path: applications/muita-conta-api
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: muita-conta-api
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

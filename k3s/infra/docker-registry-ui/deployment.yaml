@@ -22,12 +22,14 @@ spec:
             - containerPort: 80
           env:
             - name: REGISTRY_URL
-              value: "https://registry-ui.muitaconta.com.br"
+              value: "http://docker-registry-service.docker-registry.svc.cluster.local:5000"
             - name: DELETE_IMAGES
               value: "false"
             - name: REGISTRY_SECURED
               value: "true"
             - name: REGISTRY_USERNAME
+#            - name: DELETE_IMAGES
+#              value: "false"
               valueFrom:
                 secretKeyRef:
                   name: docker-registry-ui-creds
