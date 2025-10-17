@@ -134,6 +134,10 @@ properties([
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven-3.8.5'
+    }
+
     environment {
         DOCKER_REGISTRY = 'registry.muitaconta.com.br'
         IMAGE_NAME = 'muitaconta'
