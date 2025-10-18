@@ -38,6 +38,31 @@ spec:
                 secretKeyRef:
                   name: muitaconta-secrets
                   key: DB_PASSWORD
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: GOOGLE_CLIENT_ID
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_HOST
+            - name: RABBITMQ_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_PORT
+            - name: RABBITMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_USER
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: muitaconta-secrets
+                  key: RABBITMQ_PASSWORD
 
             - name: jwt.private.key
               value: "file:/etc/jwt/app.key"
