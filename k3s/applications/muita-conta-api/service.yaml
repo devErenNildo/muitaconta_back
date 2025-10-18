@@ -7,7 +7,8 @@ spec:
   selector:
     app: muita-conta-api
   ports:
-    - protocol: TCP
+    - name: http-api
+      protocol: TCP
       port: 80
       targetPort: 8080
   type: ClusterIP

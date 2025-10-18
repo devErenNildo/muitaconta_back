@@ -13,6 +13,10 @@ target/
 .springBeans
 .sts4-cache
 
+# docker compose banco
+docker-compose.yaml
+postgres-data
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
