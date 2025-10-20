@@ -63,11 +63,19 @@ spec:
                 secretKeyRef:
                   name: muitaconta-secrets
                   key: RABBITMQ_PASSWORD
-
             - name: jwt.private.key
               value: "file:/etc/jwt/app.key"
             - name: jwt.public.key
               value: "file:/etc/jwt/app.pub"
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx768m"
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+              limits:
+                cpu: "500m"
+                memory: "1Gi"
           volumeMounts:
             - name: jwt-keys-volume
               mountPath: "/etc/jwt"
