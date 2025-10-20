@@ -12,7 +12,7 @@ spec:
   tls:
     - hosts:
         - prometheus.muitaconta.com.br
-      secretName: grafana-tls
+      secretName: prometheus-tls
   rules:
     - host: "prometheus.muitaconta.com.br"
       http:
