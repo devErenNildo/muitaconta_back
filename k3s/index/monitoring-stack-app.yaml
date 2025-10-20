@@ -31,15 +31,15 @@ spec:
                 - muita-conta-api
             serviceMonitorSelector: {}
         
-        #--Limites---------
-        prometheus:
-          prometheusSpec:
-            resources:
-              requests: 100m
-              memory: 512Mi
-            limits:
-              cpu: 500m
-              memory: 1Gi
+            #--Limites---------
+            prometheus:
+              prometheusSpec:
+                resources:
+                  requests: 100m
+                  memory: 512Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
         grafana:
           resources:
             requests:
