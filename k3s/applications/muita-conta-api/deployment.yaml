@@ -73,9 +73,9 @@ spec:
             requests:
               cpu: "200m"
               memory: "512Mi"
-              limits:
-                cpu: "500m"
-                memory: "1Gi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
           volumeMounts:
             - name: jwt-keys-volume
               mountPath: "/etc/jwt"
