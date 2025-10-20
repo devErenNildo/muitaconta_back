@@ -5,6 +5,7 @@ metadata:
   namespace: muita-conta-api
   labels:
     app: muita-conta-api
+    release: monitoring-stack
 spec:
   namespaceSelector:
     matchNames:
