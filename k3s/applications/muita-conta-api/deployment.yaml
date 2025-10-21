@@ -69,7 +69,8 @@ spec:
             - name: jwt.public.key
               value: "file:/etc/jwt/app.pub"
             - name: JAVA_OPTS
-              value: "-Xms512m -Xmx768m"
+#              value: "-Xms512m -Xmx768m"
+              value: "-XX:+UseG1GC -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -Xms512m -Xmx768m"
           resources:
             requests:
               cpu: "200m"
